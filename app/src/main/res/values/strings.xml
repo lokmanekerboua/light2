@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Light</string>
+    <string name="sing_up">SING UP</string>
+    <string name="email">EMAIL</string>
+    <string name="password">PASSWORD</string>
+    <string name="full_name">FULL NAME</string>
+    <string name="already_have_an_account">ALREADY HAVE AN ACCOUNT ?</string>
+    <string name="login">LOGIN</string>
+    <string name="create">create</string>
+    <string name="twitter">TWITTER</string>
+    <string name="google">GOOGLE</string>
+    <string name="rdhytyhty">LOGIN</string>
+    <string name="login1">LOGIN</string>
+    <string name="facebook">FACEBOOK</string>
+    <string name="password2">PASSWORD</string>
+    <string name="email2">EMAIL</string>
+    <string name="profile">PROFILE</string>
+    <string name="inbox">INBOX</string>
+    <string name="library">LIBRARY</string>
+    <string name="home">HOME</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="logout">LOGOUT</string>
+    <string name="discuss">discuss</string>
+    <string name="listen">listen</string>
+    <string name="read">read</string>
+    <string name="logo">LOGO</string>
+    <string name="use_google">USE GOOGLE</string>
+    <string name="d_ont_have_an_account">D\'ont have an account?</string>
+    <string name="todo">TODO</string>
+    <string name="add_category">+ add Category</string>
+    <string name="lokmankerboua_gmail_com">lokmankerboua@gmail.com</string>
+    <string name="dashboard_admin">Dashboard Admin</string>
+    <string name="retoure">retoure</string>
+</resources>

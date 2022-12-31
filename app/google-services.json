@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "232093160981",
+    "project_id": "light-17326",
+    "storage_bucket": "light-17326.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:232093160981:android:1b705c39f012edea02e01c",
+        "android_client_info": {
+          "package_name": "com.example.light"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "232093160981-nhof6oeru88dltequo06bvg18ulecjrp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.light",
+            "certificate_hash": "c38451c6136f97365adcc3ae31ff36b7b3a73009"
+          }
+        },
+        {
+          "client_id": "232093160981-hl2m7gp8731usd24j8hj51imn8blodc1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRDPWzz7gi1SkJ0S1xXCFI5utYQ0J247A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "232093160981-hl2m7gp8731usd24j8hj51imn8blodc1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
