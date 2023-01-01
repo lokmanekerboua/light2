@@ -28,12 +28,21 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 
 public class Login extends AppCompatActivity {
     Button login;
@@ -126,8 +135,7 @@ public class Login extends AppCompatActivity {
                         progressDialog.cancel();
                         FirebaseUser user = mAuth.getCurrentUser();
                         Toast.makeText(Login.this, "Login successful", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(), DashAdmin.class));
-                        finish();
+                        checkuser();
                     } else {
                         Log.w(TAG, "", task.getException());
                         progressDialog.cancel();
@@ -147,7 +155,7 @@ public class Login extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            startActivity(new Intent(getApplicationContext(), DashAdmin.class));
+            checkuser();
         }
     }
 
@@ -180,7 +188,7 @@ public class Login extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            startActivity(new Intent(getApplicationContext(),DashAdmin.class));
+                            startActivity(new Intent(getApplicationContext(),DashUser.class));
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -189,4 +197,33 @@ public class Login extends AppCompatActivity {
                     }
                 });
     }
+
+    public void checkuser(){
+        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
+        ref.child(firebaseUser.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        String userType = ""+snapshot.child("userType").getValue();
+
+                        if(userType.equals("admin")){
+                            startActivity(new Intent(Login.this,DashAdmin.class));
+                            finish();
+                        }
+                        else {
+                            startActivity(new Intent(Login.this,DashUser.class));
+                            finish();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
+
+
 }

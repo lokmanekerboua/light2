@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.light.databinding.ActivitySingupBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,66 +34,33 @@ import java.util.HashMap;
 import java.util.Locale;
 
 public class Singup extends AppCompatActivity {
-    Spinner spin;
-    TextView login;
-    EditText emailfield, passwordfield , fullname;
-    Button create;
     FirebaseAuth mAuth;
     ProgressDialog progressDialog;
+    private ActivitySingupBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_singup);
+        binding = ActivitySingupBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 //---------------------------------spinner -----------------------------------------------------------------
         String[] gender = {"Male", "female"};
-        spin = findViewById(R.id.spinner);
         ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, gender);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spin.setAdapter(aa);
+        binding.spinner.setAdapter(aa);
 //----------------------------------------------------------------------------------------------------------
-        emailfield = findViewById(R.id.editTextTextPersonName2);
-        passwordfield = findViewById(R.id.editTextTextPassword);
-        fullname = findViewById(R.id.editTextTextPersonName);
-
-        create = findViewById(R.id.button2);
-
         mAuth = FirebaseAuth.getInstance();
 
-        create.setOnClickListener(new View.OnClickListener() {
+        binding.button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String useremail = emailfield.getText().toString().trim();
-                String userpass = passwordfield.getText().toString().trim();
-
-                if (TextUtils.isEmpty(useremail)) {
-                    emailfield.setError("Email cannot be empty");
-                    emailfield.requestFocus();
-                } else if (TextUtils.isEmpty(userpass)) {
-                    passwordfield.setError("password cannot be empty");
-                    passwordfield.requestFocus();
-                } else {
-                    mAuth.createUserWithEmailAndPassword(useremail, userpass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                Log.d(TAG, "");
-                                startActivity(new Intent(getApplicationContext(), Login.class));
-                                finish();
-                            } else {
-                                Log.w(TAG, "", task.getException());
-                                Toast.makeText(Singup.this, "fail", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-                }
+               validatedata();
             }
         });
-
-        login = findViewById(R.id.textView8);
-        login.setOnClickListener(new View.OnClickListener() {
+//------------------------------------------------go to login page------------------------------------------------------------
+        binding.textView8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), Login.class);
@@ -100,6 +68,92 @@ public class Singup extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    String fullname="", email="", password="",gender="";
+
+    private void validatedata(){
+       fullname = binding.editTextTextPersonName.getText().toString().trim().toLowerCase();
+       email = binding.editTextTextPersonName2.getText().toString().trim().toLowerCase();
+       password = binding.editTextTextPassword.getText().toString().trim();
+       gender = binding.spinner.getSelectedItem().toString().trim().toLowerCase();
+
+       if(TextUtils.isEmpty(fullname)){
+           binding.editTextTextPersonName.setError("name cannot be empty");
+           binding.editTextTextPersonName.requestFocus();
+       }
+       else if(TextUtils.isEmpty(email)){
+            binding.editTextTextPersonName2.setError("email cannot be empty");
+            binding.editTextTextPersonName2.requestFocus();
+       }
+       else if(TextUtils.isEmpty(password)){
+           binding.editTextTextPassword.setError("password cannot be empty");
+           binding.editTextTextPassword.requestFocus();
+       }
+       else if(password.length()<8){
+           binding.editTextTextPassword.setError("Password must be at least 8 characters");
+           binding.editTextTextPassword.requestFocus();
+       }
+       else{
+           createuser();
+       }
+    }
+
+    private void createuser(){
+      // progressDialog.setTitle("creating account...");
+      // progressDialog.show();
+
+        mAuth.createUserWithEmailAndPassword(email,password)
+                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+                        updateUserInfo();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                       // progressDialog.dismiss();
+                        Toast.makeText(Singup.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void updateUserInfo(){
+       // progressDialog.setTitle("Saving user info...");
+
+        long timestamp = System.currentTimeMillis();
+
+        String uid = mAuth.getUid();
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("uid", uid);
+        hashMap.put("email", email);
+        hashMap.put("fullname", fullname);
+        hashMap.put("gender", gender);
+        hashMap.put("profileImage", "");
+        hashMap.put("userType", "user");
+        hashMap.put("timestamp", timestamp);
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
+        ref.child(uid)
+                .setValue(hashMap)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                      //  progressDialog.dismiss();
+                        Toast.makeText(Singup.this, "Account created...", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(Singup.this,DashUser.class));
+                        finish();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                      //  progressDialog.dismiss();
+                        Toast.makeText(Singup.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
 }

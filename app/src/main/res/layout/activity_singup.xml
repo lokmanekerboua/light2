@@ -10,7 +10,7 @@
     <RelativeLayout
         android:id="@+id/logocontainer"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="140dp"
         android:background="@color/bleu_light">
         <TextView
             android:id="@+id/textView2"
@@ -50,11 +50,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:autofillHints=""
+                    android:drawableStart="@drawable/ic_baseline_person_24"
+                    android:drawablePadding="10dp"
                     android:ems="10"
                     android:hint="@string/full_name"
                     android:inputType="textPersonName"
                     android:padding="10dp"
-                    android:textColor="#F4F4F4"
+                    android:textColor="#14475D"
                     android:textColorHint="#14475D"
                     tools:ignore="TextContrastCheck" />
 
@@ -73,11 +75,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:autofillHints=""
+                    android:drawableStart="@drawable/ic_baseline_email_24"
+                    android:drawablePadding="10dp"
                     android:ems="10"
                     android:hint="@string/email"
                     android:inputType="textPersonName"
                     android:padding="10dp"
-                    android:textColor="#F5F5F5"
+                    android:textColor="#14475D"
                     android:textColorHint="#FF14475D"
                     tools:ignore="TextContrastCheck" />
 
@@ -97,13 +101,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:autofillHints=""
-                    android:padding="10dp"
+                    android:drawableStart="@drawable/ic_baseline_lock_24"
+                    android:drawablePadding="10dp"
                     android:ems="10"
                     android:hint="@string/password"
                     android:inputType="textPassword"
-                    android:textColor="#F5F5F5"
-                    android:textColorHint="#FF14475D"
-                    />
+                    android:padding="10dp"
+                    android:textColor="#14475D"
+                    android:textColorHint="#FF14475D" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -114,6 +119,7 @@
                 android:layout_below="@id/pass"
                 android:layout_marginTop="50dp"
                 android:backgroundTint="#D2D2D2"
+                android:background="@drawable/bg_spinner"
                 android:contentDescription="@string/app_name"
                 android:textAlignment="center" />
 

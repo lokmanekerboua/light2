@@ -1,10 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".DashUser">
 
-  </androidx.constraintlayout.widget.ConstraintLayout>
+
+  <RelativeLayout
+      android:id="@+id/toolbarcU"
+      android:layout_width="match_parent"
+      android:layout_height="?actionBarSize"
+      android:background="@drawable/taback">
+
+    <TextView
+        android:id="@+id/textViewU9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/poppins"
+        android:text="Dashboard USER"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewU10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/textViewU9"
+        android:fontFamily="@font/poppins"
+        android:text="@string/lokmankerboua_gmail_com"
+        android:textColor="#FFFFFF" />
+
+    <ImageButton
+        android:id="@+id/imageButtonU"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="47dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toEndOf="@+id/textViewU10"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/add_category"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        app:srcCompat="@drawable/ic_baseline_logout_24"
+        tools:ignore="DuplicateSpeakableTextCheck" />
+  </RelativeLayout>
+
+  <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/categoriesrwU"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_above="@id/bottU"
+      android:layout_below="@id/toolbarcU"
+      android:layout_marginStart="5dp"
+      android:layout_marginTop="0dp"
+      android:layout_marginEnd="5dp"
+      android:layout_marginBottom="0dp"
+      app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+      tools:listitem="@layout/row_cat" />
+  <LinearLayout
+      android:id="@+id/bottU"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:layout_marginStart="10dp"
+      android:layout_marginEnd="10dp"
+      android:layout_marginBottom="10dp"
+      >
+
+    <Button
+        android:id="@+id/addbookU"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/add_category"
+        android:layout_weight="1"
+        android:layout_marginEnd="10dp"
+        android:minHeight="50dp"
+        android:textAllCaps="false"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/pdff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="+ add book"
+        android:src="@drawable/ic_baseline_picture_as_pdf_24"
+        app:backgroundTint="#B5B5B5"
+        app:fabCustomSize="45dp"
+        tools:ignore="ImageContrastCheck" />
+  </LinearLayout>
+</RelativeLayout>
