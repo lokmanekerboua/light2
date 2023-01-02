@@ -16,53 +16,52 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
-    FirebaseAuth mAuth;
-
+    private FirebaseAuth firebaseAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        firebaseAuth = FirebaseAuth.getInstance();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                FirebaseUser currentUser = mAuth.getCurrentUser();
-                if (currentUser != null) {
-                    checkuser();
-                } else {
-                    Intent i = new Intent(MainActivity.this, Login.class);
-                    startActivity(i);
-                    finish();
-                }
+                checkuser();
             }
         },2000);
     }
 
     public void checkuser(){
-        FirebaseUser firebaseUser = mAuth.getCurrentUser();
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
-        ref.child(firebaseUser.getUid())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String userType = ""+snapshot.child("userType").getValue();
+       if(firebaseUser == null){
+           startActivity(new Intent(MainActivity.this , Login.class));
+           finish();
+       }
+       else{
+           DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
+           ref.child(firebaseUser.getUid())
+                   .addListenerForSingleValueEvent(new ValueEventListener() {
+                       @Override
+                       public void onDataChange(@NonNull DataSnapshot snapshot) {
+                           String userType = ""+snapshot.child("userType").getValue();
 
-                        if(userType.equals("admin")){
-                            startActivity(new Intent(MainActivity.this,DashAdmin.class));
-                            finish();
-                        }
-                        else {
-                            startActivity(new Intent(MainActivity.this,DashUser.class));
-                            finish();
-                        }
-                    }
+                           if(userType.equals("admin")){
+                               startActivity(new Intent(MainActivity.this,DashAdmin.class));
+                               finish();
+                           }
+                           else {
+                               startActivity(new Intent(MainActivity.this,DashUser.class));
+                               finish();
+                           }
+                       }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                       @Override
+                       public void onCancelled(@NonNull DatabaseError error) {
 
-                    }
-                });
+                       }
+                   });
+       }
     }
 }

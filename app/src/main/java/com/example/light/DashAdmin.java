@@ -3,6 +3,8 @@ package com.example.light;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.widget.ImageButton;
 import com.example.light.databinding.ActivityCategoryBinding;
 import com.example.light.databinding.ActivityDashAdminBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,15 +53,36 @@ public class DashAdmin extends AppCompatActivity {
         binding.imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(DashAdmin.this,Login.class));
-                finish();
+                AlertDialog.Builder builder = new AlertDialog.Builder(DashAdmin.this);
+                builder.setTitle("SingOut")
+                        .setMessage("Are you sure you want to SingOut?")
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                firebaseAuth.signOut();
+                                checkuser();
+                            }
+                        })
+                        .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        }).show();
             }
         });
     }
 
     private void checkuser(){
-
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        if(firebaseUser == null){
+            startActivity(new Intent(DashAdmin.this,Login.class));
+            finish();
+        }
+        else{
+            String email = firebaseUser.getEmail();
+            binding.textView10.setText(email);
+        }
     }
 
     private void loadCategorys(){
