@@ -6,6 +6,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Notification;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -36,8 +37,7 @@ import java.util.HashMap;
 public class PdfAddActivity extends AppCompatActivity {
     private ActivityPdfAddBinding binding;
     private FirebaseAuth firebaseAuth;
-    private ProgressBar progressBar;
-
+    ProgressDialog progressDialog;
     private ArrayList<modelcat> categorylist;
 
     private static final String Tag = "ADD_PAF_TAG";
@@ -52,6 +52,9 @@ public class PdfAddActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         Loadpdfcat();
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Uploading please wait...");
+        progressDialog.setCancelable(true);
 
         binding.backbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,11 +80,34 @@ public class PdfAddActivity extends AppCompatActivity {
         binding.uploadbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                validatedata();
+                tryconnection();
             }
         });
     }
-
+//-------------------------------------------------check internet connection-----------------------------------------------
+    private void tryconnection(){
+        if(InternetCheck.isInternetAvailable(PdfAddActivity.this)){
+            validatedata();
+        }
+        else{
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(PdfAddActivity.this);
+            builder.setTitle("SingOut")
+                    .setMessage("No INTERNET connection")
+                    .setPositiveButton("RETRY", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            tryconnection();
+                        }
+                    })
+                    .setNegativeButton("EXIT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    }).show();
+        }
+    }
+//-------------------------------------------------------------uploading functions---------------------------------------------------------
     private String title = "", description="", category= "";
     private void validatedata() {
         title = binding.titleEt.getText().toString().trim();
@@ -108,9 +134,9 @@ public class PdfAddActivity extends AppCompatActivity {
         Log.d(Tag, "uploadPdfToStorage: uploading to storage");
 
         long timestamp = System.currentTimeMillis();
-
         String filePathAndName = "Books/"+timestamp;
         StorageReference storageReference = FirebaseStorage.getInstance().getReference(filePathAndName);
+        progressDialog.show();
         storageReference.putFile(pdfuri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -129,6 +155,7 @@ public class PdfAddActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d(Tag, "onFailure: PDF upload failed due to"+ e.getMessage());
+                        progressDialog.cancel();
                         Toast.makeText(PdfAddActivity.this, "PDF upload failure due to "+ e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -158,6 +185,7 @@ public class PdfAddActivity extends AppCompatActivity {
                         binding.titleEt.setText("");
                         binding.descriptionEt.setText("");
                         binding.categoryTV.setText("");
+                        progressDialog.cancel();
                         Toast.makeText(PdfAddActivity.this, "Successfully uploaded...", Toast.LENGTH_SHORT).show();
                     }
                 })
@@ -165,10 +193,12 @@ public class PdfAddActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d(Tag,"OnFailure: faild to uplod to db due to "+e.getMessage());
+                        progressDialog.cancel();
                         Toast.makeText(PdfAddActivity.this, "Failed to upload to db due to "+e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
      }
+//------------------------------------------------------------end uploading functions------------------------------------------------------------
 
     private void Loadpdfcat() {
         Log.d(Tag, "loadPdfCategories: Loading pdf categories");
@@ -181,7 +211,6 @@ public class PdfAddActivity extends AppCompatActivity {
                 categorylist.clear();
                 for(DataSnapshot ds: snapshot.getChildren()){
                     modelcat model = ds.getValue(modelcat.class);
-
                     categorylist.add(model);
                     Log.d(Tag, "onDataChange"+ model.getCategory());
                 }

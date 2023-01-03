@@ -2,7 +2,9 @@ package com.example.light;
 
 import static android.service.controls.ControlsProviderService.TAG;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -45,6 +47,9 @@ public class Singup extends AppCompatActivity {
         setContentView(binding.getRoot());
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("please wait...");
+
 //---------------------------------spinner -----------------------------------------------------------------
         String[] gender = {"Male", "female"};
         ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, gender);
@@ -56,7 +61,7 @@ public class Singup extends AppCompatActivity {
         binding.button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               validatedata();
+               tryconnection();
             }
         });
 //------------------------------------------------go to login page------------------------------------------------------------
@@ -68,6 +73,29 @@ public class Singup extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void tryconnection(){
+        if(InternetCheck.isInternetAvailable(Singup.this)){
+            validatedata();
+        }
+        else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(Singup.this);
+            builder.setTitle("SingOut")
+                    .setMessage("No INTERNET connection")
+                    .setPositiveButton("RETRY", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            tryconnection();
+                        }
+                    })
+                    .setNegativeButton("EXIT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    }).show();
+        }
     }
 
     String fullname="", email="", password="",gender="";
@@ -100,8 +128,7 @@ public class Singup extends AppCompatActivity {
     }
 
     private void createuser(){
-      // progressDialog.setTitle("creating account...");
-      // progressDialog.show();
+        progressDialog.show();
 
         mAuth.createUserWithEmailAndPassword(email,password)
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
@@ -114,6 +141,7 @@ public class Singup extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                        // progressDialog.dismiss();
+                        progressDialog.cancel();
                         Toast.makeText(Singup.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -143,6 +171,7 @@ public class Singup extends AppCompatActivity {
                     public void onSuccess(Void unused) {
                       //  progressDialog.dismiss();
                         Toast.makeText(Singup.this, "Account created...", Toast.LENGTH_SHORT).show();
+                        progressDialog.cancel();
                         startActivity(new Intent(Singup.this,DashUser.class));
                         finish();
                     }
@@ -150,7 +179,7 @@ public class Singup extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                      //  progressDialog.dismiss();
+                        progressDialog.cancel();
                         Toast.makeText(Singup.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });

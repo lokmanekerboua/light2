@@ -2,6 +2,9 @@ package com.example.light;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -23,13 +26,36 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                checkuser();
-            }
-        },2000);
+        tryconnection();
+    }
+
+    private void tryconnection(){
+        if(InternetCheck.isInternetAvailable(MainActivity.this)){
+            firebaseAuth = FirebaseAuth.getInstance();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    checkuser();
+                }
+            },2000);
+        }
+        else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("SingOut")
+                    .setMessage("No INTERNET connection")
+                    .setPositiveButton("RETRY", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            tryconnection();
+                        }
+                    })
+                    .setNegativeButton("EXIT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    }).show();
+        }
     }
 
     public void checkuser(){

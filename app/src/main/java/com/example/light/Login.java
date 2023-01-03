@@ -9,6 +9,7 @@ import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -99,7 +100,7 @@ public class Login extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Connection();
+                tryconnection();
             }
         });
 
@@ -224,6 +225,29 @@ public class Login extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    private void tryconnection(){
+        if(InternetCheck.isInternetAvailable(Login.this)){
+            Connection();
+        }
+        else{
+            AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+            builder.setTitle("SingOut")
+                    .setMessage("No INTERNET connection")
+                    .setPositiveButton("RETRY", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            tryconnection();
+                        }
+                    })
+                    .setNegativeButton("EXIT", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    }).show();
+        }
     }
 
 
