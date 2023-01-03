@@ -50,6 +50,13 @@ public class DashAdmin extends AppCompatActivity {
             }
         });
 
+        binding.pdff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(DashAdmin.this , PdfAddActivity.class));
+            }
+        });
+
         binding.imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

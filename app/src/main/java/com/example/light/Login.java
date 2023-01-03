@@ -85,6 +85,7 @@ public class Login extends AppCompatActivity {
 
 
 //----------------------------------------------------google login btn-------------------------------------------------------------------
+        google.setEnabled(false);
         google.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
