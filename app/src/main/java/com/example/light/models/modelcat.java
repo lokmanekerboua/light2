@@ -1,4 +1,4 @@
-package com.example.light;
+package com.example.light.models;
 
 import java.util.HashMap;
 

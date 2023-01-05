@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="140dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="5dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="0dp"
+    app:contentPadding="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/pdfRL"
+        android:layout_width="100dp"
+        android:layout_height="130dp"
+        android:layout_marginEnd="5dp"
+        android:background="@color/gray2">
+        
+        <com.github.barteksc.pdfviewer.PDFView
+            android:id="@+id/pdfview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/titlepdf"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/pdfRL"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:maxLines="1"
+        android:text="@string/booktitle"/>
+
+        <TextView
+            android:id="@+id/descriptionEt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/pdfRL"
+            android:layout_marginTop="5dp"
+            style="@style/TextAppearance.MaterialComponents.Body2"
+            android:maxLines="4"
+            android:layout_below="@id/titlepdf"
+            android:text="@string/book_description"/>
+
+        <TextView
+            android:id="@+id/categoryTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            style="@style/TextAppearance.MaterialComponents.Body2"
+            android:maxLines="1"
+            android:text="@string/category"/>
+
+        <TextView
+            android:id="@+id/SizeTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            style="@style/TextAppearance.MaterialComponents.Body2"
+            android:maxLines="1"
+            android:layout_toEndOf="@id/pdfRL"
+            android:text="@string/_13_mb"/>
+
+        <TextView
+            android:id="@+id/DateTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            style="@style/TextAppearance.MaterialComponents.Body2"
+            android:maxLines="1"
+            android:layout_toEndOf="@id/SizeTV"
+            android:layout_toStartOf="@id/categoryTV"
+            android:textAlignment="center"
+            android:text="@string/dd_mm_yyyy"/>
+
+        <ImageButton
+            android:id="@+id/morebtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/add_category"
+            android:src="@drawable/ic_baseline_more_vert_24"
+            tools:ignore="TouchTargetSizeCheck" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

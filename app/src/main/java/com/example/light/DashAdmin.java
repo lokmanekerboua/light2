@@ -9,11 +9,10 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 
-import com.example.light.databinding.ActivityCategoryBinding;
+import com.example.light.adapters.adaptercategories;
 import com.example.light.databinding.ActivityDashAdminBinding;
+import com.example.light.models.modelcat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,7 +28,7 @@ public class DashAdmin extends AppCompatActivity {
     private ActivityDashAdminBinding binding;
     private FirebaseAuth firebaseAuth;
     private ArrayList<modelcat> modelcats;
-    private adaptercategories adaptercategories;
+    private com.example.light.adapters.adaptercategories adaptercategories;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
